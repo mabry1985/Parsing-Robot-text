@@ -1,4 +1,16 @@
 var robotsParser = require("robots-parser");
+const request = require('request-promise');
+
+const robotsUrl = "https://textfiles.meulie.net/robots.txt";
+
+async function getRobotsTxt(robotsUrl) {
+  const robotTxt = await request.get(robotsUrl);
+  const robots = robotsParser(robotsUrl, robotTxt);
+  console.log(robots.isAllowed("https://textfiles.meulie.net/100/", "ScraperBot"))
+    console.log(
+      robots.isAllowed("https://textfiles.meulie.net/100/", "rogerbot")
+    );
+}
 
 var robots = robotsParser(
   "http://www.example.com/robots.txt",
@@ -14,9 +26,4 @@ var robots = robotsParser(
   ].join("\n")
 );
 
-robots.isAllowed("http://www.example.com/test.html", "Sams-Bot/1.0"); // false
-robots.isAllowed("http://www.example.com/dir/test.html", "Sams-Bot/1.0"); // true
-robots.isDisallowed("http://www.example.com/dir/test2.html", "Sams-Bot/1.0"); // true
-robots.getCrawlDelay("Sams-Bot/1.0"); // 1
-robots.getSitemaps(); // ['http://example.com/sitemap.xml']
-robots.getPreferredHost(); // example.com
+getRobotsTxt(robotsUrl);
